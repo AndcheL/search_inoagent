@@ -9,6 +9,3 @@ if 'srn.zip' not in os.listdir('srn'):
         print('downloading')
     with zipfile.ZipFile('srn/srn.zip', 'r') as zip_ref:
         zip_ref.extractall('srn')
-else:
-    print('file already exists')
-    pass

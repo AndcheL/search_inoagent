@@ -5,8 +5,9 @@ def main(inn):
     files_list = os.listdir('srn')
     for fl in files_list:
         res = parse_snr(fl, inn)
-            if res:
-                return res
+            if res == 2:
+                return 'Данные об СРН найдены в базе данных ФНС'
+    return 'Данные об СРН НЕ найдены в базе данных ФНС'
 
 def parse_snr(string, inn):
     root = ET.fromstring(string)
@@ -17,6 +18,4 @@ def parse_snr(string, inn):
             dic = root[it][1].attrib
             for key, value in dic.items():
                 if value == '1':
-                    print('Данные об СРН найдены в базе данных ФНС')
-                    return key[5:]
-    return
+                    return 2

@@ -1,4 +1,4 @@
-#!/home/sunkat/git/search_inoagent/s_i_a/bin/python3.9
+#!/home/git/search_inoagent/s_i_a/bin/python3.9
 
 import inoagent_search
 import ysn_search
@@ -50,8 +50,8 @@ async def inoagents(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == 'Поиск по списку УСН')
 async def ysn(message: types.Message):
-    #response = ysn_search.main(inn)
-    await message.answer('Раздел находится в разработке', reply_markup=types.ReplyKeyboardRemove())
+    response = ysn_search.main(inn)
+    await message.answer(response, reply_markup=types.ReplyKeyboardRemove())
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
