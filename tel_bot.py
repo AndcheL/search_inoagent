@@ -1,3 +1,5 @@
+#!/home/sunkat/git/search_inoagent/s_i_a/bin/python3.9
+
 import inoagent_search
 import ysn_search
 import logging

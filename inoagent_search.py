@@ -10,9 +10,14 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleW
 def main(inn):
     search_item = inn
     link = get_link()
-    lnk = get_pdf(link)
-    if not lnk:
-        return 'Список иноагентов в настоящий момент не доступен'
+    if not link:
+        if read_pdf(search_item):
+            return 'Актуальный список иноагентов в настоящий момент не доступен\nПо данным последнего доступного реестра объект ЯВЛЯЕТСЯ иноагентом\n'
+        else:    
+            return 'Актуальный список иноагентов в настоящий момент не доступен\nПо данным последнего доступного реестра объект НЕ является иноагентом\n'
+    else:
+        print(f'Link is found ===> {link}')
+        lnk = get_pdf(link)
     if read_pdf(search_item):
         return 'Объект является иноагентом'
     else:
@@ -21,6 +26,7 @@ def main(inn):
 def get_link():
     url = 'https://minjust.gov.ru/ru/activity/directions/942/'
     html_doc = requests.get(url, headers=headers)
+    print(html_doc)
     if html_doc:
         print(f'site loaded...\n{html_doc.status_code}\n\n\n')
     else:
@@ -37,7 +43,10 @@ def get_link():
 
 def get_pdf(link):
     doc = requests.get(f'https://minjust.gov.ru{link}', headers=headers)
-    open('doc.pdf', 'wb').write(doc.content)
+    if doc.status == 200:
+        open('doc.pdf', 'wb').write(doc.content)
+    else:
+        print(doc.status)
 
 def read_pdf(search_item):
     doc = fitz.open('doc.pdf')
