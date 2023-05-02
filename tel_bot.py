@@ -14,17 +14,16 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-inn = ''
 
 
 @dp.message_handler(commands=['start'])
 async def send_request(message: types.Message):
     await message.answer('Введите ИНН: ')
 
-@dp.message_handler(lambda message: re.fullmatch(r'\d{12}', message.text))
+@dp.message_handler(lambda message: re.fullmatch(r'\d{10,12}', message.text))
 async def keyb(message: types.Message):
+    global inn
     inn = message.text
-    print(inn)
     kb = [
         [
             types.KeyboardButton(text='Поиск по списку иноагентов'),
@@ -45,11 +44,13 @@ async def keyb(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == 'Поиск по списку иноагентов')
 async def inoagents(message: types.Message):
+    global inn
     response = inoagent_search.main(inn)
     await message.answer(response, reply_markup=types.ReplyKeyboardRemove())
 
 @dp.message_handler(lambda message: message.text == 'Поиск по списку УСН')
 async def ysn(message: types.Message):
+    global inn
     response = ysn_search.main(inn)
     await message.answer(response, reply_markup=types.ReplyKeyboardRemove())
 

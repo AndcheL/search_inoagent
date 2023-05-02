@@ -1,4 +1,5 @@
 import logging
+import table_search
 import requests
 import wget
 import fitz
@@ -9,7 +10,11 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleW
 
 def main(inn):
     search_item = inn
-    link = get_link()
+    try:
+        link = get_link()
+    except requests.exeptions.ConnectionError as e:
+        print(e)
+        table_search.main(inn)
     if not link:
         if read_pdf(search_item):
             return 'Актуальный список иноагентов в настоящий момент не доступен\nПо данным последнего доступного реестра объект ЯВЛЯЕТСЯ иноагентом\n'
@@ -24,6 +29,7 @@ def main(inn):
         return 'Объект НЕ является иноагентом'
 
 def get_link():
+    print('getting the link')
     url = 'https://minjust.gov.ru/ru/activity/directions/942/'
     html_doc = requests.get(url, headers=headers)
     print(html_doc)
@@ -58,6 +64,6 @@ def read_pdf(search_item):
             return True
 
 if __name__ == '__main__':
-    main()
+    main(7725275206)
 
 
